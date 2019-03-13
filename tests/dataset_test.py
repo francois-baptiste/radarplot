@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-
+import os
 import unittest
-import context
-import numpy as np
-from CIKM import *
+from radarplot.CIKM import CIKM
 
-filename = 'data/data_sample.txt'
-indexfile = 'data/data_sample.index'
+__filepath = os.path.dirname(os.path.realpath(__file__))
+filename = os.path.abspath(__filepath + '/../data/data_sample.txt')
+indexfile = os.path.abspath(__filepath + '/../data/data_sample.index')
 cikm = CIKM(filename, indexfile)
 
 class TestSuite(unittest.TestCase):
