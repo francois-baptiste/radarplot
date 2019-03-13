@@ -22,7 +22,7 @@ Plot the 2nd layer of the 7th stack of the location number 134 in the dataset:
 
 ```python
 from radarplot.CIKM import *
-cikm = CIKM('train.txt', 'train.index')
+cikm = CIKM('train.txt')
 cikm.getRadars(134).getStack(6).getLayer(1).plot()
 ```
 
@@ -30,7 +30,7 @@ You can save it as a png file in the current directory:
 
 ```python
 from radarplot.CIKM import *
-cikm = CIKM('train.txt', 'train.index')
+cikm = CIKM('train.txt')
 cikm.getRadars(134).getStack(6).getLayer(1).plot('great_image')
 ```
 
@@ -38,7 +38,7 @@ Shows an animated radar map from the radar location 3 in the dataset:
 
 ```python
 from radarplot.CIKM import *
-cikm = CIKM('train.txt', 'train.index')
+cikm = CIKM('train.txt')
 cikm.getRadar(3).plot()
 ```
 
@@ -46,7 +46,7 @@ This saves all the radar maps (as mp4 sequences) in the directory 'vid':
 
 ```python
 from radarplot.CIKM import *
-cikm = CIKM('train.txt', 'train.index')
+cikm = CIKM('train.txt')
 for radar in cikm.getAllRadars():
 	radar.plot('vid/' + radar.getID() + '.mp4')`
 ```
@@ -55,7 +55,7 @@ It is possible to save the images in reversed sorted order of the labels:
 
 ```python
 from radarplot.CIKM import *
-cikm = CIKM('train.txt', 'train.index')
+cikm = CIKM('train.txt')
 for radar in cikm.getAllRadars(sorted=True, reversed=True):
 	radar.plot('vid/' + radar.getID() + '.mp4')
 ```
@@ -67,7 +67,7 @@ The next calls to that constructor will detect the index file and they will use 
 
 ### More examples
 
-You can have a look at the project [radarweb](https://github.com/jpcano/radarweb). It implements a client that uses this library to generate this [web](http://jesus.engineer/radarweb).
+You can have a look at the project [radarweb](https://github.com/francois-baptiste/radarweb). It implements a client that uses this library to generate this [web](http://jesus.engineer/radarweb).
 
 Tests
 -----

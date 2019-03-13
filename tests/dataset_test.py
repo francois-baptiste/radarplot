@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+import numpy as np
 import unittest
 from radarplot.CIKM import CIKM
 
 __filepath = os.path.dirname(os.path.realpath(__file__))
-filename = os.path.abspath(__filepath + '/../data/data_sample.txt')
-indexfile = os.path.abspath(__filepath + '/../data/data_sample.index')
-cikm = CIKM(filename, indexfile)
-
+filename = os.path.abspath(__filepath + '/../data/data_sample_ubyte.txt')
+cikm = CIKM(filename)
 class TestSuite(unittest.TestCase):
     """TestSuite"""
     def getLine(self, filename, n):
@@ -21,8 +20,9 @@ class TestSuite(unittest.TestCase):
 
     def getMapData(self, filename, line):
         """Get map data as a list of integers (dbZ)"""
-        rawmap =  self.getLine(filename, line).split(',')
-        mapdata = [int(x) for x in rawmap[2].split()]
+        mymemmap = np.memmap(filename, dtype='uint8', mode='r',
+                                shape=(10, 15, 4, 101, 101))
+        mapdata = mymemmap[line].ravel()
         return mapdata
 
     def flatten(self, cikm, radar):
@@ -40,7 +40,7 @@ class TestSuite(unittest.TestCase):
         object"""
         self.maxDiff = None
         radar = cikm.getRadar(0)
-        self.assertEqual(self.getMapData(filename, 0),
+        np.testing.assert_array_almost_equal(self.getMapData(filename, 0),
                          self.flatten(cikm, radar))
 
     def test_mapInter(self):
@@ -49,7 +49,7 @@ class TestSuite(unittest.TestCase):
         size = cikm.getSize()
         inter = int(size / 2)
         radar = cikm.getRadar(inter)
-        self.assertEqual(self.getMapData(filename, inter),
+        np.testing.assert_array_almost_equal(self.getMapData(filename, inter),
                          self.flatten(cikm, radar))
 
     def test_mapLast(self):
@@ -58,7 +58,7 @@ class TestSuite(unittest.TestCase):
         size = cikm.getSize()
         last = size - 1
         radar = cikm.getRadar(last)
-        self.assertEqual(self.getMapData(filename, last),
+        np.testing.assert_array_almost_equal(self.getMapData(filename, last),
                          self.flatten(cikm, radar))
 
     def test_lastFeatures(self):
@@ -72,7 +72,8 @@ class TestSuite(unittest.TestCase):
         bypass = (nstacks-last)*nlayers*radarslots
         mapdata = self.getMapData(filename, loc)[bypass:]
         mapdata2 = radar.getLastStacksFeatures(last).tolist()
-        self.assertEqual(mapdata, mapdata2)
+        np.testing.assert_array_almost_equal(mapdata, mapdata2)
+        print(mapdata2)
 
     def test_allFeatures(self):
         """Test if we have mapped correctly all the features"""
@@ -83,7 +84,8 @@ class TestSuite(unittest.TestCase):
         radarslots = cikm.radarslots
         mapdata = self.getMapData(filename, loc)
         mapdata2 = radar.getAllFeatures().tolist()
-        self.assertEqual(mapdata, mapdata2)
+        np.testing.assert_array_almost_equal(mapdata, mapdata2)
+
 
 if __name__ == '__main__':
     unittest.main()

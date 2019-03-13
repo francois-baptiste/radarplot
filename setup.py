@@ -34,7 +34,7 @@ setup(
     
     keywords='machine learning, image radar, methereology, deeplearning',
     packages=find_packages(exclude=['tests']),
-    package_data={'data': ['data_sample.txt'],
+    package_data={'data': ['data_sample_ubyte.txt'],
 },
     install_requires=['matplotlib'],
 )
