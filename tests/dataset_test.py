@@ -30,8 +30,8 @@ class TestSuite(unittest.TestCase):
         raw = []
         for s in radar.getAllStacks():
             for l in s.getAllLayers():
-                for x in range(0, cikm.getMapDimension()):
-                    for y in range(0, cikm.getMapDimension()):
+                for x in range(0, cikm.getXDimension()):
+                    for y in range(0, cikm.getYDimension()):
                         raw.append(l.getValue(x, y))
         return raw
     

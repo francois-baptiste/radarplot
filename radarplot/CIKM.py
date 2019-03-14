@@ -12,14 +12,15 @@ import numpy as np
 class CIKM (object):
     """Abstract class for reading the dataset and mapping to objets"""
 
-    def __init__(self, filename, size=10, nlayers=4, nticks=15, mapdim=101):
+    def __init__(self, filename, size=10, nlayers=4, nticks=15, xdim=101, ydim=101):
         self.filename = filename
         self.nlayers = nlayers
         self.nticks = nticks
-        self.mapdim = mapdim
+        self.xdim = xdim
+        self.ydim = ydim
         self.size = size
-        self.radarslots = self.mapdim**2
-        self.memmap = np.memmap(filename, dtype='uint8', mode='r',shape=(self.size, nticks, nlayers, mapdim, mapdim))
+        self.radarslots = self.xdim * self.ydim
+        self.memmap = np.memmap(filename, dtype='uint8', mode='r',shape=(self.size, nticks, nlayers, xdim, ydim))
 
     def _line_ind(self, filename):
         """Yield succesive labels and positions (in bytes) of the lines in 
@@ -46,14 +47,17 @@ class CIKM (object):
     def _getLayerData(self, rawlayer):
         """Returns 2D array ([[row0], [row1], ..., [rowN]] from rawlayer 
         which has the format [row0row1...rowN]."""
-        return rawlayer.reshape(-1, self.mapdim)
+        return rawlayer.reshape(-1, self.ydim)
 
     def getSize(self):
         """Returns the number of target maps in the dataset"""
         return self.size
 
-    def getMapDimension(self):
-        return self.mapdim
+    def getXDimension(self):
+        return self.xdim
+
+    def getYDimension(self):
+        return self.ydim
 
     def getIdLabelRange(self, ini, end, reversed=False):
         """Yields a tuple (idmap, label) sucessively between ini and end."""
