@@ -155,8 +155,10 @@ class RadarStack (Plot):
         AxesImage."""
         p = []
         fig = plt.figure(1)
+        ncols = int(np.ceil(np.sqrt(self.getSize())))
+        nrows = int(np.ceil(self.getSize() / ncols))
         for i in range(0, self.getSize()):
-            plt.subplot(self.getSize() / 2, 2, i + 1)
+            plt.subplot(nrows, ncols, i + 1)
             im = self.getLayer(i).putPlot()
             p.append(im)
             plt.ylabel('Height ' + str(i))
@@ -171,8 +173,10 @@ class RadarStack (Plot):
     def putThumbnail(self):
         """Draw (buffered) a thumnail of the Stack without borders and axes."""
         fig = plt.figure(1, figsize=(2.5,2.5))
+        ncols = int(np.ceil(np.sqrt(self.getSize())))
+        nrows = int(np.ceil(self.getSize() / ncols))
         for i in range(0, self.getSize()):
-            plt.subplot(self.getSize() / 2, 2, i + 1)
+            plt.subplot(nrows, ncols, i + 1)
             self.getLayer(i).putPlot()
             plt.axis('off')
         plt.subplots_adjust(wspace=0.05, hspace=0.05,left=0.01,
